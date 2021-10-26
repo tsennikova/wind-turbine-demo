@@ -446,9 +446,17 @@ spark.createDataFrame(goldDF).write.format("delta").mode("overwrite").save("/mnt
 # COMMAND ----------
 
 # DBTITLE 1,Clean up Delta Tables
-dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_bronze", True)
-dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_silver", True)
-dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_gold", True)
+# dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_bronze", True)
+# dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_silver", True)
+# dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_gold", True)
+
+# COMMAND ----------
+
+# MAGIC %md new markdpwn comment
+
+# COMMAND ----------
+
+bronzeDF.count()
 
 # COMMAND ----------
 
