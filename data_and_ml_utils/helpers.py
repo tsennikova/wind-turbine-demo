@@ -8,10 +8,6 @@ warnings.filterwarnings('ignore')
 
 # COMMAND ----------
 
-
-
-# COMMAND ----------
-
 aws_bucket_name = "oetrta/tania"
 file_type = "csv"
 mount_name = "/tania/wind-turbine-demo"
@@ -124,7 +120,3 @@ def clear_runs(experiment_name):
   for info in runs:
     client.delete_run(info.run_id)
   
-
-# COMMAND ----------
-
-

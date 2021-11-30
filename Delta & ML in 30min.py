@@ -132,26 +132,6 @@ display(silverDF)
 
 # COMMAND ----------
 
-space = "                "
-
-# COMMAND ----------
-
-# DBTITLE 1,Widget Setup
-dbutils.widgets.removeAll()
-dbutils.widgets.text('Wind Speed', '1')
-dbutils.widgets.dropdown('Month', '1', ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'])
-widget_speed = int(dbutils.widgets.get('Wind Speed'))
-widget_month = str(dbutils.widgets.get('Month'))
-
-# COMMAND ----------
-
-# DBTITLE 1,Demonstrate work of the widget
-from pyspark.sql.functions import col
-print(space, "Month: ", widget_month, "Min Wind Speed: ", widget_speed)
-display(silverDF.filter((col("Month") == widget_month)).filter((col("Wind_Speed").cast(IntegerType()) > widget_speed)))
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC ### Exploratory data analysis
 
@@ -445,7 +425,51 @@ spark.createDataFrame(goldDF).write.format("delta").mode("overwrite").save("/mnt
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ## 5.Delta Delete Support
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM tania.wind_turbine_silver
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC -- Attempting to run `DELETE` on the Parquet table
+# MAGIC DELETE FROM tania.wind_turbine_silver WHERE Month==1
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC DESCRIBE HISTORY tania.wind_turbine_silver
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM tania.wind_turbine_silver VERSION AS OF 0
+
+# COMMAND ----------
+
+spark.sql("SET spark.databricks.delta.retentionDurationCheck.enabled=false") 
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC VACUUM tania.wind_turbine_silver RETAIN 0 HOURS DRY RUN
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC DESCRIBE HISTORY tania.wind_turbine_silver
+
+# COMMAND ----------
+
 # DBTITLE 1,Clean up Delta Tables
-dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_bronze", True)
-dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_silver", True)
-dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_gold", True)
+# dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_bronze", True)
+# dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_silver", True)
+# dbutils.fs.rm("/mnt/tania/wind-turbine-demo/wind_turbine_gold", True)
+
+# COMMAND ----------
+
+
